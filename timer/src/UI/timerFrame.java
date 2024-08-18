@@ -2,6 +2,8 @@ package UI;
 
 import java.awt.*;
 import javax.swing.*;
+import Function.SettingTime;
+import Function.OperateTimer;
 
 class LabelPanel extends JPanel {
     public JLabel hourLabel; // 시간
@@ -41,34 +43,88 @@ class LabelPanel extends JPanel {
 }
 
 class TimePanel extends JPanel {
-    public JSpinner hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 23, 1));
-    public JSpinner minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
-    public JSpinner secondSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+    public JSpinner hourSpinner;
+    public JSpinner minuteSpinner;
+    public JSpinner secondSpinner; 
+    public JLabel hour;
+    public JLabel minute;
+    public JLabel second;
 
     public TimePanel() {
         setLayout(null);
         attachSpinner();
+        attachTimeLabel();
+        attachColonLabel();
+        addChangeListeners();
     }
 
     private void attachSpinner() {
-        hourSpinner.setLocation(33, 20);
+        hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 23, 1));
+        minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        secondSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        // 스피너 크기 조정
         hourSpinner.setSize(35, 35);
-        minuteSpinner.setLocation(175, 20);
         minuteSpinner.setSize(35, 35);
-        secondSpinner.setLocation(320, 20);
         secondSpinner.setSize(35, 35);
+        // 스피너 위치 조정
+        hourSpinner.setLocation(33, 20);
+        minuteSpinner.setLocation(175, 20);
+        secondSpinner.setLocation(320, 20);
+        // 스피너 부착
         this.add(hourSpinner);
         this.add(minuteSpinner);
         this.add(secondSpinner);
+    }
+
+    private void attachTimeLabel() {
+        hour = new JLabel("00");
+        minute = new JLabel("00");
+        second = new JLabel("00");
+
+        hour.setFont(new Font("Arial", Font.PLAIN, 30));
+        minute.setFont(new Font("Arial", Font.PLAIN, 30));
+        second.setFont(new Font("Arial", Font.PLAIN, 30));
+
+        hour.setLocation(33, 100);
+        minute.setLocation(175, 100);
+        second.setLocation(320, 100);
+
+        hour.setSize(50, 50);
+        minute.setSize(50, 50);
+        second.setSize(50, 50);
+
+        this.add(hour);
+        this.add(minute);
+        this.add(second);
+    }
+
+    private void attachColonLabel() {
+        for (int i=1; i<=2; i++) {
+            JLabel colonLabel = new JLabel(":");
+            colonLabel.setSize(50, 50);
+            colonLabel.setFont(new Font("Arial", Font.PLAIN, 30));
+            colonLabel.setLocation(i * 130, 100);
+            this.add(colonLabel);
+        }
+    }
+
+    private void addChangeListeners() {
+        // 각 스피너에 이벤트 추가
+        hourSpinner.addChangeListener(new SettingTime(hourSpinner, hour));
+        minuteSpinner.addChangeListener(new SettingTime(minuteSpinner, minute));
+        secondSpinner.addChangeListener(new SettingTime(secondSpinner, second));
     }
 }
 
 class ButtonPanel extends JPanel {
     public JButton startBtn; // 시작 버튼
     public JButton resetBtn; // 초기화 버튼
+    private TimePanel timePanel;
 
-    public ButtonPanel() {
+    public ButtonPanel(TimePanel timePanel) {
+        this.timePanel = timePanel;
         attachBtn();
+        addBtnListener();
     }
 
     private void attachBtn() {
@@ -83,15 +139,29 @@ class ButtonPanel extends JPanel {
         this.add(startBtn);
         this.add(resetBtn);
     }
+
+    private void addBtnListener() {
+        JLabel hour = timePanel.hour;
+        JLabel minute = timePanel.minute;
+        JLabel second = timePanel.second;
+        JSpinner hourSpinner = timePanel.hourSpinner;
+        JSpinner minuteSpinner = timePanel.minuteSpinner;
+        JSpinner secondSpinner = timePanel.secondSpinner;
+
+        startBtn.addActionListener(new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner));
+        resetBtn.addActionListener(new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner));
+    }
 }
 
 public class timerFrame extends JFrame {
     public timerFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container c = getContentPane();
+        TimePanel timePanel = new TimePanel();
+        ButtonPanel buttonPanel = new ButtonPanel(timePanel);
         c.add(new LabelPanel(), BorderLayout.NORTH);
-        c.add(new TimePanel(), BorderLayout.CENTER);
-        c.add(new ButtonPanel(), BorderLayout.SOUTH);
+        c.add(timePanel, BorderLayout.CENTER);
+        c.add(buttonPanel, BorderLayout.SOUTH);
         setSize(400, 300);
         setVisible(true);
     }
