@@ -45,7 +45,7 @@ class LabelPanel extends JPanel {
 class TimePanel extends JPanel {
     public JSpinner hourSpinner;
     public JSpinner minuteSpinner;
-    public JSpinner secondSpinner; 
+    public JSpinner secondSpinner;
     public JLabel hour;
     public JLabel minute;
     public JLabel second;
@@ -99,7 +99,7 @@ class TimePanel extends JPanel {
     }
 
     private void attachColonLabel() {
-        for (int i=1; i<=2; i++) {
+        for (int i = 1; i <= 2; i++) {
             JLabel colonLabel = new JLabel(":");
             colonLabel.setSize(50, 50);
             colonLabel.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -147,9 +147,10 @@ class ButtonPanel extends JPanel {
         JSpinner hourSpinner = timePanel.hourSpinner;
         JSpinner minuteSpinner = timePanel.minuteSpinner;
         JSpinner secondSpinner = timePanel.secondSpinner;
+        OperateTimer timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner);
 
-        startBtn.addActionListener(new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner));
-        resetBtn.addActionListener(new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner));
+        startBtn.addActionListener(timer);
+        resetBtn.addActionListener(timer);
     }
 }
 

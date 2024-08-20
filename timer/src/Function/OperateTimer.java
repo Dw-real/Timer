@@ -2,6 +2,7 @@ package Function;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.concurrent.*;
 
 public class OperateTimer implements ActionListener {
     private JLabel hour;
@@ -10,13 +11,14 @@ public class OperateTimer implements ActionListener {
     private JSpinner hourSpinner;
     private JSpinner minuteSpinner;
     private JSpinner secondSpinner;
-    private Thread timerThread;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private volatile boolean running;
     private volatile boolean resetRequested;
+    private long lastUpdateTime = 0;
     private int time;
 
     public OperateTimer(JLabel hour, JLabel minute, JLabel second,
-    JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner) {
+            JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner) {
         this.hour = hour;
         this.minute = minute;
         this.second = second;
@@ -27,13 +29,12 @@ public class OperateTimer implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton btn = (JButton)e.getSource();
+        JButton btn = (JButton) e.getSource();
         if (btn.getText().equals("시작")) {
             startTimer();
             // 스피너 비활성화
             deactivateSpinner();
-        }
-        else if (btn.getText().equals("초기화")) {
+        } else if (btn.getText().equals("초기화")) {
             resetTimer();
             // 스피너 활성화
             activateSpinner();
@@ -41,58 +42,70 @@ public class OperateTimer implements ActionListener {
     }
 
     private void startTimer() {
-        // 설정한 시간에 맞춰 초 단위로 변환
-        int hours = (int)hourSpinner.getValue();
-        int minutes = (int)minuteSpinner.getValue();
-        int seconds = (int)secondSpinner.getValue();
-        
+        if (running) {
+            resetTimer();
+        }
+
+        int hours = (int) hourSpinner.getValue();
+        int minutes = (int) minuteSpinner.getValue();
+        int seconds = (int) secondSpinner.getValue();
         time = hours * 3600 + minutes * 60 + seconds;
         running = true;
         resetRequested = false;
 
-        // 기존의 타이머 스레드가 실행 중이면 종료
-        if (timerThread != null && timerThread.isAlive()) {
-            running = false;
-            try {
-                timerThread.join();
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-         // 새로운 스레드 생성 및 시작
-         timerThread = new Thread(() -> {
+        executorService.submit(() -> {
             while (running && time > 0) {
                 if (resetRequested)
-                    break; // 스레드 종료
+                    break;
 
                 try {
-                    Thread.sleep(1000); // 1초 대기
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-                    
+
                 time--;
+                SwingUtilities.invokeLater(() -> updateUI());
+            }
 
-                // UI 업데이트
-                SwingUtilities.invokeLater(() -> {
-                    int hoursRemaining = time / 3600;
-                    int minutesRemaining = (time % 3600) / 60;
-                    int secondsRemaining = time % 60;
-
-                    hour.setText(String.format("%02d", hoursRemaining));
-                    minute.setText(String.format("%02d", minutesRemaining));
-                    second.setText(String.format("%02d", secondsRemaining));
-                    
-                    if (time <= 0) {
-                        running = false;
-                        activateSpinner();
-                    }
-                });
+            if (time <= 0) {
+                running = false;
+                SwingUtilities.invokeLater(this::activateSpinner);
             }
         });
+    }
 
-        timerThread.start();
+    private void resetTimer() {
+        running = false;
+        resetRequested = true;
+        executorService.shutdownNow(); // 타이머 스레드 종료 요청
+        try {
+            executorService.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            executorService = Executors.newSingleThreadExecutor(); // 새 스레드 풀 생성
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            hour.setText("00");
+            minute.setText("00");
+            second.setText("00");
+        });
+    }
+
+    private void updateUI() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastUpdateTime >= 500) { // 500ms마다 업데이트
+            lastUpdateTime = currentTime;
+            int hoursLeft = time / 3600;
+            int minutesLeft = (time % 3600) / 60;
+            int secondsLeft = time % 60;
+
+            hour.setText(String.format("%02d", hoursLeft));
+            minute.setText(String.format("%02d", minutesLeft));
+            second.setText(String.format("%02d", secondsLeft));
+        }
     }
 
     private void deactivateSpinner() {
@@ -105,28 +118,8 @@ public class OperateTimer implements ActionListener {
         hourSpinner.setEnabled(true);
         minuteSpinner.setEnabled(true);
         secondSpinner.setEnabled(true);
-    }
-
-    private void resetTimer() {
-        // 초기화 요청을 설정하고 스레드 종료 대기
-        running = false;
-        resetRequested = true;
-
-        if (timerThread != null && timerThread.isAlive()) {
-            try {
-                timerThread.join(); // 스레드 종료까지 대기
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        SwingUtilities.invokeLater(() -> {
-            hourSpinner.setValue(0);
-            minuteSpinner.setValue(0);
-            secondSpinner.setValue(0);
-            hour.setText("00");
-            minute.setText("00");
-            second.setText("00");
-        });
+        hourSpinner.setValue(0);
+        minuteSpinner.setValue(0);
+        secondSpinner.setValue(0);
     }
 }
