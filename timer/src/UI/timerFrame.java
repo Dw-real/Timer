@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import Function.SettingTime;
 import Function.OperateTimer;
+import Graphic.RoundButton;
 
 class LabelPanel extends JPanel {
     public JLabel hourLabel; // 시간
@@ -117,8 +118,8 @@ class TimePanel extends JPanel {
 }
 
 class ButtonPanel extends JPanel {
-    public JButton startBtn; // 시작 버튼
-    public JButton resetBtn; // 초기화 버튼
+    public RoundButton startBtn; // 시작 버튼
+    public RoundButton resetBtn; // 초기화 버튼
     private TimePanel timePanel;
 
     public ButtonPanel(TimePanel timePanel) {
@@ -128,13 +129,12 @@ class ButtonPanel extends JPanel {
     }
 
     private void attachBtn() {
-        startBtn = new JButton("시작");
-        resetBtn = new JButton("초기화");
-
-        // 버튼 크기 조정
-        startBtn.setSize(100, 20);
-        resetBtn.setSize(100, 20);
-
+        startBtn = new RoundButton("시작");
+        resetBtn = new RoundButton("초기화");
+        startBtn.setBackground(Color.CYAN);
+        startBtn.setForeground(Color.BLACK);
+        resetBtn.setBackground(Color.CYAN);
+        resetBtn.setForeground(Color.BLACK);
         // 버튼 부착
         this.add(startBtn);
         this.add(resetBtn);
@@ -163,7 +163,7 @@ public class timerFrame extends JFrame {
         c.add(new LabelPanel(), BorderLayout.NORTH);
         c.add(timePanel, BorderLayout.CENTER);
         c.add(buttonPanel, BorderLayout.SOUTH);
-        setSize(400, 300);
+        setSize(400, 400);
         setVisible(true);
     }
 }
