@@ -15,7 +15,7 @@ public class OperateTimer implements ActionListener {
     private volatile boolean running;
     private volatile boolean resetRequested;
     private long lastUpdateTime = 0;
-    private int time;
+    public int time;
 
     public OperateTimer(JLabel hour, JLabel minute, JLabel second,
             JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner) {

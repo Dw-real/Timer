@@ -3,6 +3,7 @@ package UI;
 import java.awt.*;
 import javax.swing.*;
 import Function.SettingTime;
+import Function.AddWorkToDo;
 import Function.OperateTimer;
 import Graphic.RoundButton;
 
@@ -131,6 +132,7 @@ class ButtonPanel extends JPanel {
     private void attachBtn() {
         startBtn = new RoundButton("시작");
         resetBtn = new RoundButton("초기화");
+        // 버튼 색 지정
         startBtn.setBackground(Color.CYAN);
         startBtn.setForeground(Color.BLACK);
         resetBtn.setBackground(Color.CYAN);
@@ -163,6 +165,23 @@ public class timerFrame extends JFrame {
         c.add(new LabelPanel(), BorderLayout.NORTH);
         c.add(timePanel, BorderLayout.CENTER);
         c.add(buttonPanel, BorderLayout.SOUTH);
+        addMenu(timePanel);
+        setSize(400, 400);
+        setVisible(true);
+    }
+
+    private void addMenu(JPanel panel) {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("메뉴");
+        JMenuItem menuItem = new JMenuItem("추가");
+
+        menu.add(menuItem);
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
+        // 메뉴 아이템에 액션리스너 추가
+        AddWorkToDo wtd = new AddWorkToDo(panel);
+        menuItem.addActionListener(wtd);
+
         setSize(400, 400);
         setVisible(true);
     }
