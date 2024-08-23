@@ -3,7 +3,7 @@ package UI;
 import java.awt.*;
 import javax.swing.*;
 import Function.SettingTime;
-import Function.AddWorkToDo;
+import Function.ManageWorkToDo;
 import Function.OperateTimer;
 import Graphic.RoundButton;
 
@@ -173,15 +173,18 @@ public class timerFrame extends JFrame {
     private void addMenu(JPanel panel) {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("메뉴");
-        JMenuItem menuItem = new JMenuItem("추가");
+        JMenuItem addPlan = new JMenuItem("추가");
+        JMenuItem removePlan = new JMenuItem("삭제");
 
-        menu.add(menuItem);
+        menu.add(addPlan);
+        menu.add(removePlan);
         menuBar.add(menu);
         setJMenuBar(menuBar);
         // 메뉴 아이템에 액션리스너 추가
-        AddWorkToDo wtd = new AddWorkToDo(panel);
-        menuItem.addActionListener(wtd);
-
+        ManageWorkToDo wtd = new ManageWorkToDo(panel);
+        addPlan.addActionListener(wtd);
+        removePlan.addActionListener(wtd);
+        
         setSize(400, 400);
         setVisible(true);
     }
