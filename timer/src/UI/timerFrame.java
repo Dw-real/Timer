@@ -8,9 +8,9 @@ import Function.OperateTimer;
 import Graphic.RoundButton;
 
 class LabelPanel extends JPanel {
-    public JLabel hourLabel; // 시간
-    public JLabel minuteLabel; // 분
-    public JLabel secondLabel; // 초
+    private JLabel hourLabel; // 시간
+    private JLabel minuteLabel; // 분
+    private JLabel secondLabel; // 초
 
     public LabelPanel() {
         setLayout(new GridLayout(1, 3, 50, 10));
@@ -118,6 +118,21 @@ class TimePanel extends JPanel {
     }
 }
 
+class PlanPanel extends JPanel {
+    private JLabel hourLabel;
+    private JLabel minuteLabel;
+    private JLabel secondLabel;
+    
+    public PlanPanel() {
+        setLayout(null);
+    }
+    
+    // 패널의 콘텐츠 크기를 강제로 조정
+    public void setContentSize(int width, int height) {
+        this.setPreferredSize(new Dimension(width, height));
+    }
+}
+
 class ButtonPanel extends JPanel {
     public RoundButton startBtn; // 시작 버튼
     public RoundButton resetBtn; // 초기화 버튼
@@ -160,12 +175,22 @@ public class timerFrame extends JFrame {
     public timerFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container c = getContentPane();
+        // panel 생성
         TimePanel timePanel = new TimePanel();
+        PlanPanel planPanel = new PlanPanel();
         ButtonPanel buttonPanel = new ButtonPanel(timePanel);
+
+        timePanel.setPreferredSize(new Dimension(400, 200));
+        planPanel.setContentSize(800, 800);
+        // timePanel과 planPanel을 담을 containerPanel
+        JPanel containerPanel = new JPanel(new BorderLayout());
+        containerPanel.add(timePanel, BorderLayout.NORTH);
+        containerPanel.add(addScroll(planPanel), BorderLayout.SOUTH);
+        // panel 추가
         c.add(new LabelPanel(), BorderLayout.NORTH);
-        c.add(timePanel, BorderLayout.CENTER);
+        c.add(containerPanel, BorderLayout.CENTER);
         c.add(buttonPanel, BorderLayout.SOUTH);
-        addMenu(timePanel);
+        addMenu(planPanel);
         setSize(400, 400);
         setVisible(true);
     }
@@ -184,8 +209,18 @@ public class timerFrame extends JFrame {
         ManageWorkToDo wtd = new ManageWorkToDo(panel);
         addPlan.addActionListener(wtd);
         removePlan.addActionListener(wtd);
-        
+
         setSize(400, 400);
         setVisible(true);
+    }
+
+    // 스크롤 추가
+    private JScrollPane addScroll(JPanel panel) {
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setPreferredSize(new Dimension(400, 100));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        return scrollPane;
     }
 }

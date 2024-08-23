@@ -28,11 +28,12 @@ public class ManageWorkToDo implements ActionListener {
 
     private void addWorkToDo() {
         JTextField textField = new JTextField();
-        // textField 수에 따라 위치 조정
-        int yPosition = 150 + textFieldList.size() * 30;
-        textField.setSize(200, 30);
-        textField.setLocation(50, yPosition);
         textFieldList.add(textField);
+        // textField 수에 따라 위치 조정
+        int yPosition = textFieldList.size() * 30;
+        textField.setSize(200, 30);
+        textField.setLocation(0, yPosition);
+
         panel.add(textField);
         panel.revalidate();
         panel.repaint();
