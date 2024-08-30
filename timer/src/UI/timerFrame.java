@@ -2,6 +2,7 @@ package UI;
 
 import java.awt.*;
 import javax.swing.*;
+import java.util.*;
 import Function.SettingTime;
 import Function.ManageWorkToDo;
 import Function.OperateTimer;
@@ -120,9 +121,9 @@ class TimePanel extends JPanel {
 
 class PlanPanel extends JPanel {
     public PlanPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
-    
+
     // 패널의 콘텐츠 크기를 강제로 조정
     public void setContentSize(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -166,10 +167,12 @@ class ButtonPanel extends JPanel {
         JSpinner secondSpinner = timePanel.secondSpinner;
         OperateTimer timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner);
 
-        startBtn.addActionListener(timer);
         startBtn.addActionListener(e -> {
-            
+            ArrayList<Integer> times = manageWorkToDo.getTime();
+            timer.setTimes(times);
+            timer.actionPerformed(e); // 타이머 시작
         });
+
         resetBtn.addActionListener(timer);
     }
 

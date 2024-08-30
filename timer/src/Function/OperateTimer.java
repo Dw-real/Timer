@@ -3,6 +3,9 @@ package Function;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.concurrent.*;
+import java.io.*;
+import javax.sound.sampled.*;
+import java.util.*;
 
 public class OperateTimer implements ActionListener {
     private JLabel hour;
@@ -15,7 +18,9 @@ public class OperateTimer implements ActionListener {
     private volatile boolean running;
     private volatile boolean resetRequested;
     private long lastUpdateTime = 0;
-    public int time;
+    private int time;
+    private ArrayList<Integer> times;
+    private int nextSoundTimeIndex = 0;
 
     public OperateTimer(JLabel hour, JLabel minute, JLabel second,
             JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner) {
@@ -25,6 +30,12 @@ public class OperateTimer implements ActionListener {
         this.hourSpinner = hourSpinner;
         this.minuteSpinner = minuteSpinner;
         this.secondSpinner = secondSpinner;
+        times = new ArrayList<>();
+    }
+
+    public void setTimes(ArrayList<Integer> times) {
+        this.times = times;
+        this.nextSoundTimeIndex = 0; // Reset the index when new times are set
     }
 
     @Override
@@ -65,7 +76,10 @@ public class OperateTimer implements ActionListener {
                 }
 
                 time--;
-                SwingUtilities.invokeLater(() -> updateUI());
+                SwingUtilities.invokeLater(() -> {
+                    updateUI();
+                    checkAndPlaySound(); // 설정한 시간 간격으로 사운드 재생
+                });
             }
 
             if (time <= 0) {
@@ -121,5 +135,24 @@ public class OperateTimer implements ActionListener {
         hourSpinner.setValue(0);
         minuteSpinner.setValue(0);
         secondSpinner.setValue(0);
+    }
+
+    private void checkAndPlaySound() {
+        if (nextSoundTimeIndex < times.size() && time % times.get(nextSoundTimeIndex) == 0) {
+            playSound();
+            nextSoundTimeIndex = (nextSoundTimeIndex + 1) % times.size(); // times size만큼 반복
+        }
+    }
+
+    private void playSound() {
+        try {
+            File soundFile = new File("C:\\Timer\\Timer\\timer\\src\\resources\\Pling-Sound.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
     }
 }
