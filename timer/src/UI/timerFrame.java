@@ -121,7 +121,6 @@ class TimePanel extends JPanel {
 class PlanPanel extends JPanel {
     public PlanPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
-        setPreferredSize(new Dimension(400, 100));
     }
     
     // 패널의 콘텐츠 크기를 강제로 조정
@@ -136,12 +135,10 @@ class ButtonPanel extends JPanel {
     public RoundButton startBtn; // 시작 버튼
     public RoundButton resetBtn; // 초기화 버튼
     private TimePanel timePanel;
-    private PlanPanel planPanel;
     private ManageWorkToDo manageWorkToDo;
 
     public ButtonPanel(TimePanel timePanel, PlanPanel planPanel) {
         this.timePanel = timePanel;
-        this.planPanel = planPanel;
         this.manageWorkToDo = new ManageWorkToDo(planPanel);
         attachBtn();
         addBtnListener();
@@ -197,13 +194,13 @@ public class timerFrame extends JFrame {
         // timePanel과 planPanel을 담을 containerPanel
         JPanel containerPanel = new JPanel(new BorderLayout());
         containerPanel.add(timePanel, BorderLayout.NORTH);
-        containerPanel.add(addScroll(planPanel), BorderLayout.SOUTH);
+        containerPanel.add(planPanel, BorderLayout.CENTER);
         // panel 추가
         c.add(new LabelPanel(), BorderLayout.NORTH);
         c.add(containerPanel, BorderLayout.CENTER);
         c.add(buttonPanel, BorderLayout.SOUTH);
         addMenu(planPanel);
-        setSize(400, 400);
+        setSize(400, 800);
         setVisible(true);
     }
 
@@ -224,15 +221,5 @@ public class timerFrame extends JFrame {
 
         setSize(400, 400);
         setVisible(true);
-    }
-
-    // 스크롤 추가
-    private JScrollPane addScroll(JPanel panel) {
-        JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setPreferredSize(new Dimension(400, 100));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        return scrollPane;
     }
 }

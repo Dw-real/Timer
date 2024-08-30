@@ -28,34 +28,37 @@ public class ManageWorkToDo implements ActionListener {
     }
 
     private void addWorkToDo() {
-        JPanel groupPanel = new JPanel();
-        groupPanel.setLayout(null);
-        groupPanel.setPreferredSize(new Dimension(400, 30));
-
-        // textField 추가
-        JTextField textField = new JTextField();
-        textField.setSize(100, 30);
-        textField.setLocation(0, 0);
-        groupPanel.add(textField);
-
-        // 3개의 spinner 추가
-        JSpinner hour = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
-        JSpinner minute = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
-        JSpinner second = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
-
-        hour.setBounds(200, 0, 35, 30);
-        minute.setBounds(275, 0, 35, 30);
-        second.setBounds(350, 0, 35, 30);
-        groupPanel.add(hour);
-        groupPanel.add(minute);
-        groupPanel.add(second);
-
-        // 그룹 패널을 메인 패널에 추가
-        groupList.add(groupPanel);
-        panel.add(groupPanel);
-        
-        panel.revalidate();
-        panel.repaint();
+        // 10개 까지만 추가 가능
+        if (groupList.size() < 10) {
+            JPanel groupPanel = new JPanel();
+            groupPanel.setLayout(null);
+            groupPanel.setPreferredSize(new Dimension(400, 30));
+    
+            // textField 추가
+            JTextField textField = new JTextField();
+            textField.setSize(100, 30);
+            textField.setLocation(0, 0);
+            groupPanel.add(textField);
+    
+            // 3개의 spinner 추가
+            JSpinner hour = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+            JSpinner minute = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+            JSpinner second = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+    
+            hour.setBounds(200, 0, 35, 30);
+            minute.setBounds(275, 0, 35, 30);
+            second.setBounds(350, 0, 35, 30);
+            groupPanel.add(hour);
+            groupPanel.add(minute);
+            groupPanel.add(second);
+    
+            // 그룹 패널을 메인 패널에 추가
+            groupList.add(groupPanel);
+            panel.add(groupPanel);
+            
+            panel.revalidate();
+            panel.repaint();
+        } 
     }
 
     private void removeWorkToDo() {
