@@ -19,6 +19,7 @@ public class OperateTimer implements ActionListener {
     private volatile boolean resetRequested;
     private long lastUpdateTime = 0;
     private int time;
+    private int intervals;
     private ArrayList<Integer> times;
     private int nextSoundTimeIndex = 0;
 
@@ -35,7 +36,7 @@ public class OperateTimer implements ActionListener {
 
     public void setTimes(ArrayList<Integer> times) {
         this.times = times;
-        this.nextSoundTimeIndex = 0; // Reset the index when new times are set
+        this.nextSoundTimeIndex = 0;
     }
 
     @Override
@@ -61,6 +62,7 @@ public class OperateTimer implements ActionListener {
         int minutes = (int) minuteSpinner.getValue();
         int seconds = (int) secondSpinner.getValue();
         time = hours * 3600 + minutes * 60 + seconds;
+        intervals = 0;
         running = true;
         resetRequested = false;
 
@@ -76,6 +78,7 @@ public class OperateTimer implements ActionListener {
                 }
 
                 time--;
+                intervals++;
                 SwingUtilities.invokeLater(() -> {
                     updateUI();
                     checkAndPlaySound(); // 설정한 시간 간격으로 사운드 재생
@@ -138,7 +141,7 @@ public class OperateTimer implements ActionListener {
     }
 
     private void checkAndPlaySound() {
-        if (nextSoundTimeIndex < times.size() && time % times.get(nextSoundTimeIndex) == 0) {
+        if (nextSoundTimeIndex < times.size() && intervals % times.get(nextSoundTimeIndex) == 0) {
             playSound();
             nextSoundTimeIndex = (nextSoundTimeIndex + 1) % times.size(); // times size만큼 반복
         }
