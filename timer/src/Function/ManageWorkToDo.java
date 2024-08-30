@@ -66,4 +66,35 @@ public class ManageWorkToDo implements ActionListener {
             panel.repaint();
         }
     }
+
+    public ArrayList<Integer> getTime() {
+        ArrayList<Integer> timeList = new ArrayList<>();
+
+        for (JPanel panel : groupList) {
+            int hours = -1; // 기본값 설정
+            int minutes = -1; // 기본값 설정
+            int seconds = -1; // 기본값 설정
+            
+            for (Component c : panel.getComponents()) {
+                if (c instanceof JSpinner) {
+                    JSpinner spinner = (JSpinner) c;
+                    int value = (int) spinner.getValue();
+
+                    if (hours == -1) {
+                        hours = value;
+                    }
+                    else if (minutes == -1) {
+                        minutes = value;
+                    }
+                    else if (seconds == -1) {
+                        seconds = value;
+                    }
+                }
+            }
+            int time = hours * 3600 + minutes * 60 + seconds;
+            timeList.add(time);
+        }
+        return timeList;
+    }
+    
 }

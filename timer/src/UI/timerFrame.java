@@ -136,9 +136,13 @@ class ButtonPanel extends JPanel {
     public RoundButton startBtn; // 시작 버튼
     public RoundButton resetBtn; // 초기화 버튼
     private TimePanel timePanel;
+    private PlanPanel planPanel;
+    private ManageWorkToDo manageWorkToDo;
 
-    public ButtonPanel(TimePanel timePanel) {
+    public ButtonPanel(TimePanel timePanel, PlanPanel planPanel) {
         this.timePanel = timePanel;
+        this.planPanel = planPanel;
+        this.manageWorkToDo = new ManageWorkToDo(planPanel);
         attachBtn();
         addBtnListener();
     }
@@ -166,21 +170,30 @@ class ButtonPanel extends JPanel {
         OperateTimer timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner);
 
         startBtn.addActionListener(timer);
+        startBtn.addActionListener(e -> {
+            
+        });
         resetBtn.addActionListener(timer);
+    }
+
+    public ManageWorkToDo gManageWorkToDo() {
+        return manageWorkToDo;
     }
 }
 
 public class timerFrame extends JFrame {
+    private ManageWorkToDo wtd;
+    private ButtonPanel buttonPanel;
+
     public timerFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container c = getContentPane();
         // panel 생성
         TimePanel timePanel = new TimePanel();
         PlanPanel planPanel = new PlanPanel();
-        ButtonPanel buttonPanel = new ButtonPanel(timePanel);
+        buttonPanel = new ButtonPanel(timePanel, planPanel);
 
         timePanel.setPreferredSize(new Dimension(400, 200));
-        
         // timePanel과 planPanel을 담을 containerPanel
         JPanel containerPanel = new JPanel(new BorderLayout());
         containerPanel.add(timePanel, BorderLayout.NORTH);
@@ -205,7 +218,7 @@ public class timerFrame extends JFrame {
         menuBar.add(menu);
         setJMenuBar(menuBar);
         // 메뉴 아이템에 액션리스너 추가
-        ManageWorkToDo wtd = new ManageWorkToDo(panel);
+        wtd = buttonPanel.gManageWorkToDo();
         addPlan.addActionListener(wtd);
         removePlan.addActionListener(wtd);
 
@@ -217,7 +230,7 @@ public class timerFrame extends JFrame {
     private JScrollPane addScroll(JPanel panel) {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setPreferredSize(new Dimension(400, 100));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         return scrollPane;
