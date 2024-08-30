@@ -35,7 +35,7 @@ public class ManageWorkToDo implements ActionListener {
 
             // textField 추가
             JTextField textField = new JTextField();
-            textField.setSize(100, 30);
+            textField.setSize(180, 30);
             textField.setLocation(0, 0);
             groupPanel.add(textField);
 
