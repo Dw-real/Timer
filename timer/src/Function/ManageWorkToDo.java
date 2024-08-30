@@ -92,7 +92,9 @@ public class ManageWorkToDo implements ActionListener {
                 }
             }
             int time = hours * 3600 + minutes * 60 + seconds;
-            timeList.add(time);
+            if (time != 0) {
+                timeList.add(time);
+            }
         }
         return timeList;
     }
