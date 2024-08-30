@@ -119,17 +119,16 @@ class TimePanel extends JPanel {
 }
 
 class PlanPanel extends JPanel {
-    private JLabel hourLabel;
-    private JLabel minuteLabel;
-    private JLabel secondLabel;
-    
     public PlanPanel() {
-        setLayout(null);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
+        setPreferredSize(new Dimension(400, 100));
     }
     
     // 패널의 콘텐츠 크기를 강제로 조정
     public void setContentSize(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
+        this.setSize(width, height);
+        revalidate(); // 레이아웃을 다시 계산
     }
 }
 
@@ -181,7 +180,7 @@ public class timerFrame extends JFrame {
         ButtonPanel buttonPanel = new ButtonPanel(timePanel);
 
         timePanel.setPreferredSize(new Dimension(400, 200));
-        planPanel.setContentSize(800, 800);
+        
         // timePanel과 planPanel을 담을 containerPanel
         JPanel containerPanel = new JPanel(new BorderLayout());
         containerPanel.add(timePanel, BorderLayout.NORTH);
@@ -218,7 +217,7 @@ public class timerFrame extends JFrame {
     private JScrollPane addScroll(JPanel panel) {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setPreferredSize(new Dimension(400, 100));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         return scrollPane;
