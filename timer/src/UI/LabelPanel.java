@@ -2,11 +2,13 @@ package UI;
 
 import java.awt.*;
 import javax.swing.*;
+import Graphic.FontManager;
 
 public class LabelPanel extends JPanel {
     private JLabel hourLabel; // 시간
     private JLabel minuteLabel; // 분
     private JLabel secondLabel; // 초
+    private Font customFont = FontManager.getCustomFont(18f);
 
     public LabelPanel() {
         setLayout(new GridLayout(1, 3, 50, 10));
@@ -23,6 +25,10 @@ public class LabelPanel extends JPanel {
         hourLabel.setSize(50, 20);
         minuteLabel.setSize(50, 20);
         secondLabel.setSize(50, 20);
+
+        hourLabel.setFont(customFont);
+        minuteLabel.setFont(customFont);
+        secondLabel.setFont(customFont);
 
         // label 부착
         this.add(hourLabel);

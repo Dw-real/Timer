@@ -3,6 +3,7 @@ package UI;
 import java.awt.*;
 import javax.swing.*;
 import Function.SettingTime;
+import Graphic.FontManager;
 
 public class TimePanel extends JPanel {
     public JSpinner hourSpinner;
@@ -15,6 +16,7 @@ public class TimePanel extends JPanel {
     private JLabel hourLabel;
     private JLabel minuteLabel;
     private JLabel secondLabel;
+    private Font customFont = FontManager.getCustomFont(15f);
 
     public TimePanel() {
         setLayout(null);
@@ -93,6 +95,11 @@ public class TimePanel extends JPanel {
         hourLabel.setLocation(190, 170);
         minuteLabel.setLocation(265, 170);
         secondLabel.setLocation(340, 170);
+
+        workToDoLabel.setFont(customFont);
+        hourLabel.setFont(customFont);
+        minuteLabel.setFont(customFont);
+        secondLabel.setFont(customFont);
 
         this.add(workToDoLabel);
         this.add(hourLabel);

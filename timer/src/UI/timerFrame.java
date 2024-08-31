@@ -25,8 +25,10 @@ public class timerFrame extends JFrame {
         c.add(new LabelPanel(), BorderLayout.NORTH);
         c.add(containerPanel, BorderLayout.CENTER);
         c.add(buttonPanel, BorderLayout.SOUTH);
+
         addMenu(planPanel);
         setSize(400, 800);
+        setResizable(false);
         setVisible(true);
     }
 
