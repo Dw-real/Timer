@@ -40,7 +40,8 @@ public class ButtonPanel extends JPanel {
         JSpinner hourSpinner = timePanel.hourSpinner;
         JSpinner minuteSpinner = timePanel.minuteSpinner;
         JSpinner secondSpinner = timePanel.secondSpinner;
-        OperateTimer timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner);
+        OperateTimer timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner,
+                startBtn);
 
         startBtn.addActionListener(e -> {
             ArrayList<Integer> times = manageWorkToDo.getTime();

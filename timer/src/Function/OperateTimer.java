@@ -17,20 +17,23 @@ public class OperateTimer implements ActionListener {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private volatile boolean running;
     private volatile boolean resetRequested;
+    private volatile boolean paused = false; // 중지 상태를 나타내는 플래그
     private long lastUpdateTime = 0;
     private int time;
     private int intervals;
     private ArrayList<Integer> times;
     private int nextSoundTimeIndex = 0;
+    private JButton controlButton;
 
     public OperateTimer(JLabel hour, JLabel minute, JLabel second,
-            JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner) {
+            JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner, JButton controlButton) {
         this.hour = hour;
         this.minute = minute;
         this.second = second;
         this.hourSpinner = hourSpinner;
         this.minuteSpinner = minuteSpinner;
         this.secondSpinner = secondSpinner;
+        this.controlButton = controlButton;
         times = new ArrayList<>();
     }
 
@@ -46,10 +49,18 @@ public class OperateTimer implements ActionListener {
             startTimer();
             // 스피너 비활성화
             deactivateSpinner();
+            btn.setText("중지");
+        } else if (btn.getText().equals("중지")) {
+            pauseTimer();
+            btn.setText("계속");
+        } else if (btn.getText().equals("계속")) {
+            resumeTimer();
+            btn.setText("중지");
         } else if (btn.getText().equals("초기화")) {
             resetTimer();
             // 스피너 활성화
             activateSpinner();
+            controlButton.setText("시작");
         }
     }
 
@@ -64,38 +75,90 @@ public class OperateTimer implements ActionListener {
         time = hours * 3600 + minutes * 60 + seconds;
         intervals = 0;
         running = true;
+        paused = false;
         resetRequested = false;
 
         executorService.submit(() -> {
             while (running && time > 0) {
-                if (resetRequested)
-                    break;
+                for (int i = 0; i < 100; i++) { // 1초를 10ms 단위로 나눠서 처리
+                    if (resetRequested || paused) {
+                        running = false; // 이 부분을 추가하여 바로 중지
+                        return;
+                    }
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
+                    try {
+                        Thread.sleep(10); // 10ms 대기
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
                 }
 
                 time--;
                 intervals++;
                 SwingUtilities.invokeLater(() -> {
                     updateUI();
-                    checkAndPlaySound(); // 설정한 시간 간격으로 사운드 재생
+                    checkAndPlaySound();
                 });
             }
 
             if (time <= 0) {
                 running = false;
-                SwingUtilities.invokeLater(this::activateSpinner);
+                SwingUtilities.invokeLater(() -> {
+                    activateSpinner();
+                    controlButton.setText("시작");
+                });
             }
         });
+    }
+
+    private void pauseTimer() {
+        if (running) {
+            paused = true;
+            running = false;
+        }
+    }
+
+    private void resumeTimer() {
+        if (paused) {
+            running = true;
+            paused = false;
+
+            executorService.submit(() -> {
+                while (running && time > 0) {
+                    if (resetRequested || paused)
+                        break;
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    time--;
+                    intervals++;
+                    SwingUtilities.invokeLater(() -> {
+                        updateUI();
+                        checkAndPlaySound(); // 설정한 시간 간격으로 사운드 재생
+                    });
+                }
+
+                if (time <= 0) {
+                    running = false;
+                    SwingUtilities.invokeLater(() -> {
+                        activateSpinner();
+                        controlButton.setText("시작");
+                    });
+                }
+            });
+        }
     }
 
     private void resetTimer() {
         running = false;
         resetRequested = true;
-        executorService.shutdownNow(); // 타이머 스레드 종료 요청
+        paused = false;
+        executorService.shutdown(); // 타이머 스레드 종료 요청
         try {
             executorService.awaitTermination(1, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
