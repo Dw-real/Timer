@@ -80,14 +80,14 @@ public class OperateTimer implements ActionListener {
 
         executorService.submit(() -> {
             while (running && time > 0) {
-                for (int i = 0; i < 100; i++) { // 1초를 10ms 단위로 나눠서 처리
+                for (int i = 0; i < 10; i++) { // 1초를 100ms 단위로 나눠서 처리
                     if (resetRequested || paused) {
                         running = false; // 이 부분을 추가하여 바로 중지
                         return;
                     }
 
                     try {
-                        Thread.sleep(10); // 10ms 대기
+                        Thread.sleep(100); // 100ms 대기
                     } catch (InterruptedException ex) {
                         Thread.currentThread().interrupt();
                         return;

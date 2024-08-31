@@ -40,9 +40,17 @@ public class ManageWorkToDo implements ActionListener {
             groupPanel.add(textField);
 
             // 3개의 spinner 추가
-            JSpinner hour = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
-            JSpinner minute = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
-            JSpinner second = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+            JSpinner hour = new JSpinner(new SpinnerNumberModel(0, -1, 24, 1));
+            JSpinner minute = new JSpinner(new SpinnerNumberModel(0, -1, 60, 1));
+            JSpinner second = new JSpinner(new SpinnerNumberModel(0, -1, 60, 1));
+
+            // 0~23 자유롭게 이동
+            TimeChangeListener htc = new TimeChangeListener(hour);
+            hour.addChangeListener(htc);
+            TimeChangeListener mtc = new TimeChangeListener(minute);
+            minute.addChangeListener(mtc);
+            TimeChangeListener stc = new TimeChangeListener(second);
+            second.addChangeListener(stc);
 
             hour.setBounds(200, 0, 35, 30);
             minute.setBounds(275, 0, 35, 30);

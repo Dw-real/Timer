@@ -3,6 +3,7 @@ package UI;
 import java.awt.*;
 import javax.swing.*;
 import Function.SettingTime;
+import Function.TimeChangeListener;
 import Graphic.FontManager;
 
 public class TimePanel extends JPanel {
@@ -29,9 +30,9 @@ public class TimePanel extends JPanel {
     }
 
     private void attachSpinner() {
-        hourSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 23, 1));
-        minuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
-        secondSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        hourSpinner = new JSpinner(new SpinnerNumberModel(0, -1, 24, 1));
+        minuteSpinner = new JSpinner(new SpinnerNumberModel(0, -1, 60, 1));
+        secondSpinner = new JSpinner(new SpinnerNumberModel(0, -1, 60, 1));
         // 스피너 크기 조정
         hourSpinner.setSize(35, 35);
         minuteSpinner.setSize(35, 35);
@@ -40,6 +41,15 @@ public class TimePanel extends JPanel {
         hourSpinner.setLocation(33, 20);
         minuteSpinner.setLocation(175, 20);
         secondSpinner.setLocation(320, 20);
+
+        // 0~23 자유롭게 이동
+        TimeChangeListener htc = new TimeChangeListener(hourSpinner);
+        hourSpinner.addChangeListener(htc);
+        TimeChangeListener mtc = new TimeChangeListener(minuteSpinner);
+        minuteSpinner.addChangeListener(mtc);
+        TimeChangeListener stc = new TimeChangeListener(secondSpinner);
+        secondSpinner.addChangeListener(stc);
+
         // 스피너 부착
         this.add(hourSpinner);
         this.add(minuteSpinner);
