@@ -9,7 +9,7 @@ public class FontManager {
     public static Font getCustomFont(float size) {
         if (customFont == null) {
             try {
-                File fontFile = new File("C:\\Timer\\Timer\\timer\\src\\resources\\NanumBarunpenR.ttf");
+                File fontFile = new File("timer/src/resources/NanumBarunpenR.ttf");
                 customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(size);
                 GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
                 ge.registerFont(customFont);
