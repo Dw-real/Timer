@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class PlanPanel extends JPanel {
     public PlanPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridLayout(10, 1));
     }
 
     // 패널의 콘텐츠 크기를 강제로 조정
