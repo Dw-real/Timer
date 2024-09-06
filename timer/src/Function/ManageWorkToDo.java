@@ -30,6 +30,7 @@ public class ManageWorkToDo implements ActionListener {
         // 10개 까지만 추가 가능
         if (groupList.size() < 10) {
             JPanel groupPanel = new JPanel();
+            groupPanel.setBackground(Color.WHITE);
             groupPanel.setLayout(null);
             groupPanel.setPreferredSize(new Dimension(400, 30));
 

@@ -18,16 +18,17 @@ public class ButtonPanel extends JPanel {
         this.manageWorkToDo = new ManageWorkToDo(planPanel);
         attachBtn();
         addBtnListener();
+        setBackground(Color.WHITE);
     }
 
     private void attachBtn() {
         startBtn = new RoundButton("시작");
         resetBtn = new RoundButton("초기화");
         // 버튼 색 지정
-        startBtn.setBackground(Color.CYAN);
-        startBtn.setForeground(Color.BLACK);
-        resetBtn.setBackground(Color.CYAN);
-        resetBtn.setForeground(Color.BLACK);
+        startBtn.setBackground(new Color(103, 153, 255));
+        startBtn.setForeground(Color.WHITE);
+        resetBtn.setBackground(new Color(103, 153, 255));
+        resetBtn.setForeground(Color.WHITE);
         // 버튼 부착
         this.add(startBtn);
         this.add(resetBtn);

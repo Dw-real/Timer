@@ -27,6 +27,7 @@ public class TimePanel extends JPanel {
         attachLabel();
         alignText();
         addChangeListeners();
+        setBackground(Color.WHITE);
     }
 
     private void attachSpinner() {

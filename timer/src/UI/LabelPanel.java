@@ -14,6 +14,7 @@ public class LabelPanel extends JPanel {
         setLayout(new GridLayout(1, 3, 50, 10));
         attachLabel();
         alignText();
+        setBackground(Color.WHITE);
     }
 
     private void attachLabel() {

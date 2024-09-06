@@ -7,6 +7,7 @@ import Function.ManageWorkToDo;
 public class timerFrame extends JFrame {
     private ManageWorkToDo wtd;
     private ButtonPanel buttonPanel;
+    private Color color = new Color(103, 153, 255);
 
     public timerFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,6 +38,17 @@ public class timerFrame extends JFrame {
         JMenu menu = new JMenu("메뉴");
         JMenuItem addPlan = new JMenuItem("추가");
         JMenuItem removePlan = new JMenuItem("삭제");
+
+        // 색상 설정
+        menuBar.setBackground(color);
+        menu.setBackground(color);
+        menu.setForeground(Color.WHITE);
+
+        addPlan.setBackground(color);
+        addPlan.setForeground(Color.WHITE);
+
+        removePlan.setBackground(color);
+        removePlan.setForeground(Color.WHITE);
 
         menu.add(addPlan);
         menu.add(removePlan);
