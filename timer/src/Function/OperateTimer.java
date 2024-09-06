@@ -212,7 +212,7 @@ public class OperateTimer implements ActionListener {
 
     private void playSound() {
         try {
-            File soundFile = new File("C:\\Timer\\Timer\\timer\\src\\resources\\Pling-Sound.wav");
+            File soundFile = new File("timer\\src\\resources\\Pling-Sound.wav");
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
