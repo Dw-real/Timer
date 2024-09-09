@@ -46,6 +46,7 @@ public class ButtonPanel extends JPanel {
 
         startBtn.addActionListener(e -> {
             ArrayList<Integer> times = manageWorkToDo.getTime();
+            Collections.sort(times);
             timer.setTimes(times);
             timer.actionPerformed(e); // 타이머 시작
         });
