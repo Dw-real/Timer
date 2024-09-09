@@ -1,8 +1,8 @@
-package Graphic;
+package graphic;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+import javax.swing.*;
 
 public class RoundButton extends JButton {
 

@@ -1,11 +1,11 @@
-package Function;
+package function;
 
-import javax.swing.*;
 import java.awt.event.*;
-import java.util.concurrent.*;
 import java.io.*;
-import javax.sound.sampled.*;
 import java.util.*;
+import java.util.concurrent.*;
+import javax.sound.sampled.*;
+import javax.swing.*;
 
 public class OperateTimer implements ActionListener {
     private JLabel hour;
@@ -24,6 +24,7 @@ public class OperateTimer implements ActionListener {
     private ArrayList<Integer> times;
     private int nextSoundTimeIndex = 0;
     private JButton controlButton;
+    private File soundFile = null;
 
     public OperateTimer(JLabel hour, JLabel minute, JLabel second,
             JSpinner hourSpinner, JSpinner minuteSpinner, JSpinner secondSpinner, JButton controlButton) {
@@ -212,7 +213,9 @@ public class OperateTimer implements ActionListener {
 
     private void playSound() {
         try {
-            File soundFile = new File("timer\\src\\resources\\Pling-Sound.wav");
+            if (soundFile == null) {
+                soundFile = new File("timer\\src\\resources\\Pling-Sound.wav");
+            }
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
@@ -220,5 +223,9 @@ public class OperateTimer implements ActionListener {
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void setSoundFile(String filePath) {
+        soundFile = new File(filePath);
     }
 }

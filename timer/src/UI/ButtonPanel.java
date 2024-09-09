@@ -1,17 +1,18 @@
-package UI;
+package ui;
 
+import function.ManageWorkToDo;
+import function.OperateTimer;
+import graphic.RoundButton;
 import java.awt.*;
-import javax.swing.*;
-import Graphic.RoundButton;
-import Function.ManageWorkToDo;
-import Function.OperateTimer;
 import java.util.*;
+import javax.swing.*;
 
 public class ButtonPanel extends JPanel {
     public RoundButton startBtn; // 시작 버튼
     public RoundButton resetBtn; // 초기화 버튼
     private TimePanel timePanel;
     private ManageWorkToDo manageWorkToDo;
+    private OperateTimer timer;
 
     public ButtonPanel(TimePanel timePanel, PlanPanel planPanel) {
         this.timePanel = timePanel;
@@ -41,7 +42,7 @@ public class ButtonPanel extends JPanel {
         JSpinner hourSpinner = timePanel.hourSpinner;
         JSpinner minuteSpinner = timePanel.minuteSpinner;
         JSpinner secondSpinner = timePanel.secondSpinner;
-        OperateTimer timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner,
+        timer = new OperateTimer(hour, minute, second, hourSpinner, minuteSpinner, secondSpinner,
                 startBtn);
 
         startBtn.addActionListener(e -> {
@@ -56,5 +57,9 @@ public class ButtonPanel extends JPanel {
 
     public ManageWorkToDo gManageWorkToDo() {
         return manageWorkToDo;
+    }
+
+    public OperateTimer gOperateTimer() {
+        return timer;
     }
 }

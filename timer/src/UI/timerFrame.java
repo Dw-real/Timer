@@ -1,8 +1,9 @@
-package UI;
+package ui;
 
+import function.ManageWorkToDo;
+import function.SelectSound;
 import java.awt.*;
 import javax.swing.*;
-import Function.ManageWorkToDo;
 
 public class timerFrame extends JFrame {
     private ManageWorkToDo wtd;
@@ -38,6 +39,7 @@ public class timerFrame extends JFrame {
         JMenu menu = new JMenu("메뉴");
         JMenuItem addPlan = new JMenuItem("추가");
         JMenuItem removePlan = new JMenuItem("삭제");
+        JMenuItem selectSound = new JMenuItem("알림음 선택");
 
         // 색상 설정
         menuBar.setBackground(color);
@@ -50,15 +52,21 @@ public class timerFrame extends JFrame {
         removePlan.setBackground(color);
         removePlan.setForeground(Color.WHITE);
 
+        selectSound.setBackground(color);
+        selectSound.setForeground(Color.WHITE);
+
         menu.add(addPlan);
         menu.add(removePlan);
+        menu.add(selectSound);
         menuBar.add(menu);
         setJMenuBar(menuBar);
         // 메뉴 아이템에 액션리스너 추가
         wtd = buttonPanel.gManageWorkToDo();
         addPlan.addActionListener(wtd);
         removePlan.addActionListener(wtd);
-
+        SelectSound select = new SelectSound(buttonPanel);
+        selectSound.addActionListener(select);
+        
         setSize(400, 400);
         setVisible(true);
     }

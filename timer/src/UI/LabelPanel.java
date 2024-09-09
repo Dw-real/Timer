@@ -1,8 +1,8 @@
-package UI;
+package ui;
 
+import graphic.FontManager;
 import java.awt.*;
 import javax.swing.*;
-import Graphic.FontManager;
 
 public class LabelPanel extends JPanel {
     private JLabel hourLabel; // 시간

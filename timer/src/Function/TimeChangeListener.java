@@ -1,7 +1,7 @@
-package Function;
+package function;
 
-import javax.swing.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 public class TimeChangeListener implements ChangeListener {
     private JSpinner spinner;

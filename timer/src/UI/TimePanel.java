@@ -1,10 +1,10 @@
-package UI;
+package ui;
 
+import function.SettingTime;
+import function.TimeChangeListener;
+import graphic.FontManager;
 import java.awt.*;
 import javax.swing.*;
-import Function.SettingTime;
-import Function.TimeChangeListener;
-import Graphic.FontManager;
 
 public class TimePanel extends JPanel {
     public JSpinner hourSpinner;

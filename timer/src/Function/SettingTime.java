@@ -1,4 +1,4 @@
-package Function;
+package function;
 
 import javax.swing.*;
 import javax.swing.event.*;
